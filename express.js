@@ -15,7 +15,6 @@ routers.forEach(function(router) {
   name = name[name.length - 1].split('.')[0];
   name = name === 'index' ? '' : name;
   name = '/' + name;
-  console.log(name);
   app.use(name, router);
 });
 
