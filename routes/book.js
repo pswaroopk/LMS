@@ -10,18 +10,21 @@ router.get('/', function(req, res, next) {
     if (!books || books.length === 0) return res.json({
       message: 'No books found'
     })
-    return res.json(books);
+    return res.json(books.slice(100, 200));
   })
   .catch(next)
 });
 
+// usuage
+// localhost:3000/book/search?q=The Res
 router.get('/search', function(req, res, next) {
   var query = req.query.q;
   var Book = orm.models.book;
-  Book.find().where({
+  Book.find({
       or: [
-        {  isbn: req.params.query },
-        {  title: req.params.query}]
+        { isbn: { 'contains': query } },
+        { title: { 'contains': query } }
+      ]
   })
   .populate('authors')
   .then(function (books) {

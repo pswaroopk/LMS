@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     if (!authors || authors.length === 0) return res.json({
       message: 'No authors found'
     })
-    return res.json(authors);
+    return res.json(authors.slice(0, 10));
   })
   .catch(next)
 });
@@ -18,8 +18,7 @@ router.get('/', function(req, res, next) {
 // just for testing
 router.post('/', function(req, res, next){
   var Author = orm.models.author;
-  Author.findOrCreate({ authorid: req.body.authorid }, {
-    authorid: req.body.authorid,
+  Author.findOrCreate({ name: req.body.name }, {
     name: req.body.name
   })
   .then(function foundOrCreated(author) {

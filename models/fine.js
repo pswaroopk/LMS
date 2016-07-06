@@ -5,8 +5,8 @@
 module.exports = {
 
   attributes: {
-    paid: { type: 'number' },
-    fineAmount: { type: 'number' },
+    paid: { type: 'integer' },
+    fineAmount: { type: 'integer' },
     bookloan: { model: 'bookloan', required: true }
   }
 };
