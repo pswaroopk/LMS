@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 // just for testing
 router.post('/', function(req, res, next){
   var Book = orm.models.book;
-  Book.findOrCreate({ isbn: req.body.isbn }, {
+  Book.findOrCreate({ book: req.body.isbn }, {
     isbn: req.body.isbn,
     title: req.body.title,
     author: req.body.author
