@@ -14,8 +14,17 @@ router.get('/', function(req, res, next) {
   .catch(next)
 });
 
-router.post('/', function(req, res){
-
+// just for testing
+router.post('/', function(req, res, next){
+  var Book = orm.models.book;
+  Book.findOrCreate({ isbn: req.body.isbn }, {
+    isbn: req.body.isbn,
+    title: req.body.title
+  })
+  .then(function foundOrCreated(book) {
+    return res.status(201).json(book);
+  })
+  .catch(next)
 });
 
 module.exports = router;

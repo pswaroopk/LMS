@@ -5,6 +5,8 @@
 module.exports = {
 
   attributes: {
-    name: { type: 'string', required: true }
+    authorId: { type: 'string', required: true, unique: true, primaryKey:true },
+    name: { type: 'string', required: true },
+    books: { collection: 'book', via: 'author' }
   }
 };

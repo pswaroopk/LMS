@@ -4,7 +4,7 @@
  */
 module.exports = {
 
-  attributes: {    
+  attributes: {
     cardNo: { type: 'string', required: true, primaryKey: true },
     ssn: { type: 'string' },
     fname: { type: 'string' },

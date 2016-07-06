@@ -6,6 +6,7 @@ module.exports = {
 
   attributes: {
     name: { type: 'string', required: true },
-    address: { type: 'string' }
+    address: { type: 'string' },
+    bookcopies: { collection: 'bookcopy', via: 'librarybranch' }
   }
 };

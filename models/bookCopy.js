@@ -5,8 +5,8 @@
 module.exports = {
 
   attributes: {
-    isbn: { type: 'string', required: true, unique: true ,primaryKey:true},
-    title: { type: 'string', defaultsTo: 'NA' }
+    bookId: { type: 'string', required: true, unique: true ,primaryKey:true},
+    book: { model: 'book', required: true },
+    librarybranch: { model: 'librarybranch', required: true }
   }
-
 };
