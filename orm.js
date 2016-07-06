@@ -8,7 +8,7 @@ var orm = new Waterline();
  * This will load all models under ./models into the ORM
  */
 
-var collections = glob.sync('./models/*').map(function(collection) {
+var collections = glob.sync('./models/book.js').map(function(collection) {
   var name = collection.match(/\.\/models\/(.+)\.js/)[1];
 
   // Load collection
