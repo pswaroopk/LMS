@@ -33,7 +33,7 @@ module.exports.orm = {
 
   defaults: {
     connection: 'localPostgres',
-    migrate: 'alter'
+    migrate: 'safe'
   }
 
 };

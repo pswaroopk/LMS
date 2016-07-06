@@ -1,13 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-      <p>
-        Hello World!
-      </p>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="./main.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
 
-  </body>
+    <div id="exTab1" class="container">
+      <ul  class="nav nav-pills">
+        <li class="active">
+          <a  href="#1a" data-toggle="tab">Overview</a>
+        </li>
+        <li><a href="#2a" data-toggle="tab">Using nav-pills</a>
+        </li>
+        <li><a href="#3a" data-toggle="tab">Applying clearfix</a>
+        </li>
+        <li><a href="#4a" data-toggle="tab">Background color</a>
+        </li>
+      </ul>
+
+      <div class="tab-content clearfix">
+        <div class="tab-pane active" id="1a">
+          <input type="text" name="search" class="input" id="search" placeholder="Search books here"/>
+        </div>
+        <div class="tab-pane" id="2a">
+          <h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
+        </div>
+        <div class="tab-pane" id="3a">
+          <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
+        </div>
+        <div class="tab-pane" id="4a">
+          <h3>We use css to change the background color of the content to be equal to the tab</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script src="./main.js"></script>
+</body>
 </html>

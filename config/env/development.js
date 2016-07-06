@@ -16,7 +16,7 @@ module.exports = {
     },
     defaults: {
       connection: 'localPostgres',
-      migrate: 'alter'
+      migrate: 'safe'
     }
   }
 };

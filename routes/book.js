@@ -5,12 +5,13 @@ var orm = require('../orm');
 router.get('/', function(req, res, next) {
   var Book = orm.models.book;
   Book.find()
+  // .limit(100)
   .populate('authors')
   .then(function (books) {
     if (!books || books.length === 0) return res.json({
       message: 'No books found'
     })
-    return res.json(books.slice(100, 200));
+    return res.json(books[0]);
   })
   .catch(next)
 });
