@@ -18,8 +18,8 @@ router.get('/', function(req, res, next) {
 // just for testing
 router.post('/', function(req, res, next){
   var Author = orm.models.author;
-  Author.findOrCreate({ authorId: req.body.authorId }, {
-    authorId: req.body.authorId,
+  Author.findOrCreate({ authorid: req.body.authorid }, {
+    authorid: req.body.authorid,
     name: req.body.name
   })
   .then(function foundOrCreated(author) {

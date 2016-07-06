@@ -30,8 +30,8 @@ router.put('/:cardNo', function(req, res, next){
 // just for testing
 router.post('/', function(req, res, next){
   var borrower = orm.models.borrower;
-  borrower.findOrCreate({ cardNo: req.body.cardNo }, {
-    cardNo: req.body.cardNo,
+  borrower.findOrCreate({ cardno: req.body.cardno }, {
+    cardno: req.body.cardno,
     ssn: req.body.ssn,
     fname: req.body.fname,
     lname: req.body.lname,

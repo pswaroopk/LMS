@@ -18,8 +18,8 @@ router.get('/', function(req, res, next) {
 // just for testing
 router.post('/', function(req, res, next){
   var libraryBranch = orm.models.librarybranch;
-  libraryBranch.findOrCreate({ branchId: req.body.branchId }, {
-    branchId: req.body.branchId,
+  libraryBranch.findOrCreate({ branchid: req.body.branchid }, {
+    branchid: req.body.branchid,
     address: req.body.address,
     name: req.body.name
   })

@@ -5,7 +5,25 @@ var orm = require('../orm');
 router.get('/', function(req, res, next) {
   var Book = orm.models.book;
   Book.find()
-  .populate('author')
+  .populate('authors')
+  .then(function (books) {
+    if (!books || books.length === 0) return res.json({
+      message: 'No books found'
+    })
+    return res.json(books);
+  })
+  .catch(next)
+});
+
+router.get('/search', function(req, res, next) {
+  var query = req.query.q;
+  var Book = orm.models.book;
+  Book.find().where({
+      or: [
+        {  isbn: req.params.query },
+        {  title: req.params.query}]
+  })
+  .populate('authors')
   .then(function (books) {
     if (!books || books.length === 0) return res.json({
       message: 'No books found'
@@ -21,7 +39,7 @@ router.post('/', function(req, res, next){
   Book.findOrCreate({ book: req.body.isbn }, {
     isbn: req.body.isbn,
     title: req.body.title,
-    author: req.body.author
+    authors: req.body.authors
   })
   .then(function foundOrCreated(book) {
     return res.status(201).json(book);
