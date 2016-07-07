@@ -15,6 +15,29 @@ router.get('/', function(req, res, next) {
   .catch(next)
 });
 
+
+// usuage
+// localhost:3000/author/search?q=Rowling
+router.get('/search', function(req, res, next) {
+  var query = req.query.q;
+  var author = orm.models.author;
+  var skip = req.query.skip || 0;
+  var limit = req.query.limit || 20;
+  author.find({ name: { 'contains': query } })
+  .skip(skip)
+  .limit(20)
+  .populate('books')
+  .then(function (authors) {
+    if (!authors || authors.length === 0) return res.json({
+      message: 'No authors found'
+    })
+    return res.json(authors);
+  })
+  .catch(next)
+});
+
+
+
 // just for testing
 router.post('/', function(req, res, next){
   var Author = orm.models.author;

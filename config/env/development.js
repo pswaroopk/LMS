@@ -13,10 +13,6 @@ module.exports = {
         user: 'postgres',
         password:'1234'
       }
-    },
-    defaults: {
-      connection: 'localPostgres',
-      migrate: 'alter'
     }
   }
 };
