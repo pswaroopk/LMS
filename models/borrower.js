@@ -10,6 +10,8 @@ module.exports = {
     fname: { type: 'string' },
     lname: { type: 'string' },
     address: { type: 'string' },
+    city: { type: 'string' },
+    state: { type: 'string' },
     phone: { type: 'string' }
   }
 };

@@ -19,6 +19,8 @@ router.put('/:cardNo', function(req, res, next){
   var borrower = orm.models.borrower;
   borrower.update({ cardNo: req.params.cardNo }, {
     address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
     phone: req.body.phone,
   })
   .then(function updated(borrower) {
@@ -36,6 +38,8 @@ router.post('/', function(req, res, next){
     fname: req.body.fname,
     lname: req.body.lname,
     address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
     phone: req.body.phone,
   })
   .then(function foundOrCreated(borrower) {

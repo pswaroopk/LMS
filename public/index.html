@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <title></title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link href="./main.css" rel="stylesheet">
 </head>
 <body>
@@ -12,28 +14,48 @@
     <div id="exTab1" class="container">
       <ul  class="nav nav-pills">
         <li class="active">
-          <a  href="#1a" data-toggle="tab">Overview</a>
+          <a  href="#1a" data-toggle="tab">Library</a>
         </li>
-        <li><a href="#2a" data-toggle="tab">Using nav-pills</a>
+        <li><a href="#2a" data-toggle="tab">Search</a>
         </li>
-        <li><a href="#3a" data-toggle="tab">Applying clearfix</a>
+        <li><a href="#3a" data-toggle="tab">Check-In</a>
         </li>
-        <li><a href="#4a" data-toggle="tab">Background color</a>
+        <li><a href="#4a" data-toggle="tab">Check-out</a>
+        </li>
+        <li><a href="#5a" data-toggle="tab">Fines</a>
         </li>
       </ul>
 
       <div class="tab-content clearfix">
-        <div class="tab-pane active" id="1a">
-          <input type="text" name="search" class="input" id="search" placeholder="Search books here"/>
-        </div>
+        <div class="tab-pane active" id="1a"></div>
         <div class="tab-pane" id="2a">
-          <h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
+          <h3>Please type the name of the book</h3>
+          <input type="text" name="search" class="input" id="search" placeholder="Search books here"/>
+          <!-- Single button -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select Branch <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Oak Lawn  </a></li>
+              <li><a href="#">Lakewood</a></li>
+              <li><a href="#">Grauwyler Park</a></li>
+              <li><a href="#">Highland Hills</a></li>
+              <li><a href="#">Audelia Road</a></li>
+              <!-- <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li> -->
+            </ul>
+          </div>
+          <label for="isbn">ISBN*</label><input type="text" name="isbn" value="">
         </div>
         <div class="tab-pane" id="3a">
-          <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
+          <h3></h3>
         </div>
         <div class="tab-pane" id="4a">
-          <h3>We use css to change the background color of the content to be equal to the tab</h3>
+          <h3></h3>
+        </div>
+        <div class="tab-pane" id="5a">
+          <h3>Payback the dues!</h3>
         </div>
       </div>
     </div>
@@ -41,6 +63,9 @@
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
+      <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.3.js"></script>
   <script src="./main.js"></script>
 </body>
 </html>
