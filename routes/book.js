@@ -5,6 +5,7 @@ var orm = require('../orm');
 router.get('/', function(req, res, next) {
   var Book = orm.models.book;
   Book.find()
+  // .limit(100)
   .populate('authors')
   .limit(50)
   .then(function (books) {

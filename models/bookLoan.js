@@ -8,4 +8,3 @@ module.exports = {
     dueDate: { type: 'date' }
   }
 };
-
