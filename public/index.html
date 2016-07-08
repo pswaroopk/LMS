@@ -47,17 +47,19 @@
               Select Branch <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="#">Oak Lawn  </a></li>
-              <li><a href="#">Lakewood</a></li>
-              <li><a href="#">Grauwyler Park</a></li>
-              <li><a href="#">Highland Hills</a></li>
-              <li><a href="#">Audelia Road</a></li>
+              <li><a href="#" value="1">Oak Lawn  </a></li>
+              <li><a href="#" value="2">Lakewood</a></li>
+              <li><a href="#" value="3">Grauwyler Park</a></li>
+              <li><a href="#" value="4">Highland Hills</a></li>
+              <li><a href="#" value="5">Audelia Road</a></li>
               <li role="separator" class="divider"></li>
-              <li><a href="#" id='any'>Any branch</a></li>
+              <li><a href="#" value="-1">Any branch</a></li>
             </ul>
           </div>
+          <button class="btn btn-small" ng-click='search(query)'>GO</button>
           <div class='search_results'>
             <div class="table-responsive">
+              Results: {{ searchResults.length }}
               <table class="table table-bordered">
                 <thead>
                   <tr class='row'>
