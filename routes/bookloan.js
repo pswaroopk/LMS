@@ -2,21 +2,18 @@ var express = require('express');
 var router = express.Router();
 var orm = require('../orm');
 var _ = require('lodash');
-router.get('/check', function(req, res, next) {
-  var bookcopy = orm.models.bookcopy;
-  var isbn = req.body.isbn;
-  var cardno = req.body.cardno;
-  var branch = req.body.branch;
-  bookcopy.find({
-    cardno: cardno,
-    isbn: isbn,
-    branchid: branch
+router.get('/checkout/:cardno', function(req, res, next) {
+  var bookloan = orm.models.bookloan;
+  var cardno = req.params.cardno;
+  bookloan.find({
+    cardno: cardno
   })
-  .then(function (bookcopys) {
-    if (!bookcopys || bookcopys.length === 0) return res.json({
+  .populate('bookcopy')
+  .then(function (lentBooks) {
+    if (!lentBooks || lentBooks.length === 0) return res.json({
       message: 'No books found'
     })
-    return res.json(bookcopys);
+    return res.json(lentBooks);
   })
   .catch(next);
 });
@@ -48,7 +45,7 @@ router.post('/checkout', function(req, res, next){
     return orm.models.bookcopy.query({
       text: "SELECT DISTINCT bc.id \
         FROM bookcopy bc \
-        LEFT JOIN bookloan bl ON bl.bookcopy = cast(bc.id AS text) \
+        LEFT JOIN bookloan bl ON bl.bookcopy = bc.id \
         WHERE bc.branchid = $1 AND isbn = $2 \
             AND (bl.bookcopy IS NULL OR (bl.datein IS NOT NULL AND bl.datein < (current_date))) ",
       values: [branch, isbn]

@@ -109,6 +109,7 @@
           class='clearable form-control'
           placeholder='Card No'
         />
+        <button class="btn btn-small" ng-click='checkedOutBooks()'>Fetch Books</button>
         <br/>
         <label for="checkoutBranch">Branch*</label>
         <div class="btn-group">
@@ -132,7 +133,6 @@
               <thead>
                 <tr class='row'>
                   <th class='col-xs-3'>ISBN</th>
-                  <th class='col-xs-3'>Title</th>
                   <th class='col-xs-3'>Date Out</th>
                   <th class='col-xs-3'>Due Date</th>
                   <th class='col-xs-3'>Branch</th>
@@ -141,10 +141,9 @@
               <tbody>
                 <tr class='row' ng-repeat="result in checkoutData">
                   <td class='col-xs-3 ng-cloak' >{{ result.bookcopy.isbn }}</td>
-                  <td class='col-xs-3 ng-cloak' >{{ result.title }}</td>
                   <td class='col-xs-3 ng-cloak' >{{ result.dateout }}</td>
                   <td class='col-xs-3 ng-cloak' >{{ result.duedate }}</td>
-                  <td class='col-xs-3 ng-cloak' >{{ result.branchid }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.bookcopy.branchid }}</td>
                 </tr>
               </tbody>
             </table>

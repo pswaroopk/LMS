@@ -54,7 +54,20 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
             $scope.checkoutData = data;
         })
         .error(function(data) {
-          $scope.checkoutStatus = data.message;
+          if (data) $scope.checkoutStatus = data.message;
+          console.log('Error: ' + data);
+        });
+    };
+
+    $scope.checkedOutBooks = function() {
+      var branch = $("#checkOut .btn:first-child").val();
+      $scope.checkoutBranch = branch;
+      if (!$scope.checkoutCardNo) return false;
+      $http.get('/bookloan/checkout/' + $scope.checkoutCardNo)
+        .success(function(data) {
+          $scope.checkoutData = data;
+        })
+        .error(function(data) {
           console.log('Error: ' + data);
         });
     };

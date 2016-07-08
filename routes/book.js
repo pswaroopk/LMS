@@ -27,12 +27,14 @@ router.get('/search', function(req, res) {
   var limit = req.query.limit || 20;
 
   Book.query({
-    text: "SELECT b.isbn, b.title, string_agg(DISTINCT a.name, ', ') as author, string_agg(DISTINCT coalesce(bl.bookcopy,'AVAILABLE'), ',') as availability  \
+    text: "SELECT b.isbn, b.title, \
+      string_agg(DISTINCT a.name, ', ') as author, \
+      string_agg(DISTINCT (CASE WHEN bl.bookcopy IS NULL THEN 'AVAILABLE' ELSE 'NOT AVAILABLE' END), ',') as availability  \
       FROM bookauthor ba \
       JOIN author a ON ba.author = a.id \
       JOIN book b ON b.isbn = ba.book \
       JOIN bookcopy bc ON bc.isbn = b.isbn \
-      LEFT JOIN bookloan bl ON CAST(coalesce(bl.bookcopy, '0') AS integer) = bc.id \
+      LEFT JOIN bookloan bl ON bl.bookcopy = bc.id \
       WHERE ($2 = '-1' OR bc.branchid IN ($2)) AND (a.name LIKE  $1 OR b.title LIKE  $1 OR b.isbn LIKE $1) \
       GROUP BY b.isbn, b.title",
     values: ['%' + query + '%', branch]
