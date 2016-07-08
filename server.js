@@ -75,14 +75,12 @@ exports = module.exports = {
     /**
      * Init ORM and server listen on port
      */
-     console.log('im here 1!')
     //  console.log(assign(config.orm, ormConfig))
     orm.initialize(assign(config.orm, ormConfig), function(err, models) {
       if (err) throw err;
 
       orm.models = models.collections;
       orm.connections = models.connections;
-      console.log('im here!')
       /**
        * Listen on provided port, on all network interfaces.
        */

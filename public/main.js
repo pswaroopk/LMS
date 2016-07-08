@@ -6,17 +6,19 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
 
     $(".dropdown-menu").on('click', 'li a', function(){
       $(".btn:first-child").text($(this).text());
-      $(".btn:first-child").val($(this).text());
+      $(".btn:first-child").val($(this).attr('value'));
     });
 
     $scope.search = function(query) {
-        $http.get('/book/search?q=' + query) // .isbn + '&title=' + query.title + '&author=' + query.author
-            .success(function(data) {
-                $scope.searchResults = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
+      var branch = $(".btn:first-child").val();
+      branch = branch === "" ? '-1' : branch;
+      $http.get('/book/search?q=' + query + '&branch=' + branch) // .isbn + '&title=' + query.title + '&author=' + query.author
+          .success(function(data) {
+              $scope.searchResults = data;
+          })
+          .error(function(data) {
+              console.log('Error: ' + data);
+          });
     };
 
     $scope.deleteBookmark = function(id) {
