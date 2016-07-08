@@ -1,23 +1,18 @@
-$(document).ready(function() {
-  $('#search').on('keyup', function(event)/*.delay(300)*/ {
-    $.ajax('/book/search?q=' + event.target.value, function (data) {
-      console.log(data);
-    })
-  })
-})
-
-
-
 var lmsApp = angular.module('lmsApp', ['ui.bootstrap']);
 
 lmsApp.controller('mainController',['$scope','$http', function($scope, $http, audio) {
     $scope.formData = {};
     $scope.searchResults = [];
 
+    $(".dropdown-menu").on('click', 'li a', function(){
+      $(".btn:first-child").text($(this).text());
+      $(".btn:first-child").val($(this).text());
+    });
+
     $scope.search = function(query) {
         $http.get('/book/search?q=' + query) // .isbn + '&title=' + query.title + '&author=' + query.author
             .success(function(data) {
-                $scope.books = data;
+                $scope.searchResults = data;
             })
             .error(function(data) {
                 console.log('Error: ' + data);
@@ -35,6 +30,12 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
             });
     };
 
+    $scope.sanitizeAuthors = function (authors) {
+      return authors.map(function (author) {
+        return author.name;
+      })
+    }
+
 
 
     //pagination data
@@ -42,11 +43,11 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     // ,$scope.currentPage = 0
     // ,$scope.numPerPage = 12
     // ,$scope.maxSize = 5;
-    //
+
     // $scope.setPage = function (pageNo) {
     //     $scope.currentPage = pageNo;
     // };
-    //
+
     // $scope.$watch('currentPage + numPerPage', function() {
     //     var begin = (($scope.currentPage - 1) * $scope.numPerPage)
     //     , end = begin + $scope.numPerPage;
