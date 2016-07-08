@@ -3,6 +3,15 @@ var lmsApp = angular.module('lmsApp', ['ui.bootstrap']);
 lmsApp.controller('mainController',['$scope','$http', function($scope, $http, audio) {
     $scope.formData = {};
     $scope.searchResults = [];
+    $scope.checkoutData = [];
+    $scope.checkoutISBN = '';
+    $scope.checkoutBranch = '';
+    $scope.checkoutCardNo = '';
+
+    // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    //   // On tab active do something here
+    // });
+
 
     $(".dropdown-menu").on('click', 'li a', function(){
       $(".btn:first-child").text($(this).text());
@@ -10,7 +19,7 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     });
 
     $scope.search = function(query) {
-      var branch = $(".btn:first-child").val();
+      var branch = $("#searchTab .btn:first-child").val();
       branch = branch === "" ? '-1' : branch;
       $http.get('/book/search?q=' + query + '&branch=' + branch) // .isbn + '&title=' + query.title + '&author=' + query.author
           .success(function(data) {
@@ -19,6 +28,35 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
           .error(function(data) {
               console.log('Error: ' + data);
           });
+    };
+
+    $scope.isValid = function () {
+      if (!$scope.checkoutISBN || !$scope.checkoutBranch || !$scope.checkoutCardNo) {
+        $scope.checkoutStatus = '* Please fill all required fields';
+        return false;
+      }
+      $scope.checkoutStatus = '';
+      return true;
+    }
+
+    $scope.checkout = function() {
+      var branch = $("#checkOut .btn:first-child").val();
+      $scope.checkoutBranch = branch;
+      if (!$scope.isValid()) return false;
+      var formData = {
+        isbn: $scope.checkoutISBN,
+        branch: $scope.checkoutBranch,
+        cardno: $scope.checkoutCardNo
+      }
+      // console.log($scope.checkoutISBN, $scope.checkoutBranch, $scope.checkoutCardNo);
+      $http.post('/bookloan/checkout', formData)
+        .success(function(data) {
+            $scope.checkoutData = data;
+        })
+        .error(function(data) {
+          $scope.checkoutStatus = data.message;
+          console.log('Error: ' + data);
+        });
     };
 
     $scope.deleteBookmark = function(id) {

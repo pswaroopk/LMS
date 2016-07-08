@@ -1,10 +1,10 @@
 module.exports = {
 
   attributes: {
-    loanid: { type: 'integer', required: true, primaryKey: true },
     bookcopy: { model: 'bookcopy', required: true },
-    dateOut: { type: 'date' },
-    dateIn: { type: 'date' },
-    dueDate: { type: 'date' }
+    cardno: { model: 'borrower', required: true },
+    dateout: { type: 'date', required: true },
+    datein: { type: 'date' },
+    duedate: { type: 'date' }
   }
 };

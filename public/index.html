@@ -15,9 +15,9 @@
       <ul  class="nav nav-pills">
         <li class="active"><a href="#searchTab" data-toggle="tab">Search</a>
         </li>
-        <li><a href="#3a" data-toggle="tab">Check-In</a>
+        <li><a href="#checkOut" data-toggle="tab">Check Out</a>
         </li>
-        <li><a href="#4a" data-toggle="tab">Check-out</a>
+        <li><a href="#checkIn" data-toggle="tab">Check In</a>
         </li>
         <li><a href="#5a" data-toggle="tab">Fines</a>
         </li>
@@ -82,21 +82,73 @@
         </div>
       </div>
 
-      <div class="tab-pane" id="3a">
-        <h3></h3>
+      <div class="tab-pane" id="checkOut">
+        <h3>Please enter book, branch and card details to checkout</h3>
+        <label for="checkoutISBN">ISBN*</label>
+        <input
+          name="checkoutISBN"
+          type='text'
+          value=''
+          ng-model='checkoutISBN'
+          id='checkoutISBN'
+          autofocus
+          style="width:200px;display: inline-block;"
+          class='clearable form-control'
+          placeholder='ISBN'
+        />
+        <br/>
+        <label for="checkoutCardNo">Card No*</label>
+        <input
+          name="checkoutCardNo"
+          type='text'
+          value=''
+          ng-model='checkoutCardNo'
+          id='checkoutCardNo'
+          autofocus
+          style="width:200px;display: inline-block;"
+          class='clearable form-control'
+          placeholder='Card No'
+        />
+        <br/>
+        <label for="checkoutBranch">Branch*</label>
         <div class="btn-group">
           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Select Branch <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a href="#">Oak Lawn  </a></li>
-            <li><a href="#">Lakewood</a></li>
-            <li><a href="#">Grauwyler Park</a></li>
-            <li><a href="#">Highland Hills</a></li>
-            <li><a href="#">Audelia Road</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Any branches</a></li>
+            <li><a href="#" value="1">Oak Lawn  </a></li>
+            <li><a href="#" value="2">Lakewood</a></li>
+            <li><a href="#" value="3">Grauwyler Park</a></li>
+            <li><a href="#" value="4">Highland Hills</a></li>
+            <li><a href="#" value="5">Audelia Road</a></li>
           </ul>
+        </div>
+        <button class="btn btn-small" ng-click='checkout()'>Check Out</button>
+        <p style="padding: 10px;color:red;">{{ checkoutStatus }}</p>
+        <div class='search_results'>
+          <div class="table-responsive">
+          Total books lent: {{ checkoutData.length }}
+            <table class="table table-bordered">
+              <thead>
+                <tr class='row'>
+                  <th class='col-xs-3'>ISBN</th>
+                  <th class='col-xs-3'>Title</th>
+                  <th class='col-xs-3'>Date Out</th>
+                  <th class='col-xs-3'>Due Date</th>
+                  <th class='col-xs-3'>Branch</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class='row' ng-repeat="result in checkoutData">
+                  <td class='col-xs-3 ng-cloak' >{{ result.bookcopy.isbn }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.title }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.dateout }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.duedate }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.branchid }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="tab-pane" id="4a">

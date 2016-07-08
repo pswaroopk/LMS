@@ -31,7 +31,7 @@ router.get('/search', function(req, res) {
       FROM bookauthor ba \
       JOIN author a ON ba.author = a.id \
       JOIN book b ON b.isbn = ba.book \
-      LEFT JOIN bookcopy bc ON bc.isbn = b.isbn \
+      JOIN bookcopy bc ON bc.isbn = b.isbn \
       LEFT JOIN bookloan bl ON CAST(coalesce(bl.bookcopy, '0') AS integer) = bc.id \
       WHERE ($2 = '-1' OR bc.branchid IN ($2)) AND (a.name LIKE  $1 OR b.title LIKE  $1 OR b.isbn LIKE $1) \
       GROUP BY b.isbn, b.title",

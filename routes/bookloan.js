@@ -26,25 +26,71 @@ router.post('/checkout', function(req, res, next){
   var cardno = req.body.cardno;
   var branch = req.body.branch;
   var today = new Date();
+  var loanPeriod = 14;
   var bookloan = orm.models.bookloan;
-  bookcopy.find({
+  bookloan.find({
     cardno: cardno
   })
-  .then(function found(bookcopies) {
-    if (bookcopies && bookcopies.length >= 3) {
+  .then(function found(bookslent) {
+    if (bookslent && bookslent.length >= 3) {
       return res.status(400).json({
         error: true,
         message: 'Book loan limit exceeded'
       });
     }
-    var dueBooks = _.filter(bookcopies, function (copy) { return (new Date(createdAt) > today); })
+    var dueBooks = _.filter(bookslent, function (book) { return (new Date(book.duedate) < today); })
     if (dueBooks && dueBooks.length > 0) {
       return res.status(400).json({
         error: true,
-        message: 'You have some book due book. Please check in those and continue'
+        message: 'You have some due book. Please check in those and continue'
       });
     }
-    return res.status(201).json(bookcopy);
+    return orm.models.bookcopy.query({
+      text: "SELECT DISTINCT bc.id \
+        FROM bookcopy bc \
+        LEFT JOIN bookloan bl ON bl.bookcopy = cast(bc.id AS text) \
+        WHERE bc.branchid = $1 AND isbn = $2 \
+            AND (bl.bookcopy IS NULL OR (bl.datein IS NOT NULL AND bl.datein < (current_date))) ",
+      values: [branch, isbn]
+    }, function (err, queryResults){
+        if (err) {
+          return res.status(500).json({
+            error: err,
+            message: 'some unexpected error occurred'
+          });
+        }
+        if (queryResults && queryResults.rows && queryResults.rows.length > 0) {
+          var book = queryResults.rows[0];
+          var duedate = today.setDate(today.getDate() + loanPeriod);
+          return orm.models.bookloan.create({
+            cardno: cardno,
+            bookcopy: book.id,
+            dateout: new Date(),
+            duedate: new Date(duedate)
+          }).exec(function (err, model) {
+            if (err) {
+              return res.status(500).json({
+                error: err,
+                message: 'some unexpected error occurred'
+              });
+            }
+            return orm.models.bookloan.find({
+              cardno: cardno,
+              datein: null
+            })
+            .populate('bookcopy')
+            .then(function (models) {
+              return res.status(200).json(models);
+            });
+
+          });
+        } else {
+          return res.status(404).json({
+            message: 'Sorry, Book is not available for checkout in the requested branch.'
+          });
+        }
+
+    })
   })
   .catch(next)
 });
