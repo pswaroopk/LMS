@@ -22,3 +22,7 @@ input {
 .field-label {
   width: 75px;
 }
+
+.required {
+  color: red;
+}

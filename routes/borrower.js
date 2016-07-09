@@ -32,18 +32,32 @@ router.put('/:cardNo', function(req, res, next){
 // just for testing
 router.post('/', function(req, res, next){
   var borrower = orm.models.borrower;
-  borrower.findOrCreate({ cardno: req.body.cardno }, {
-    cardno: req.body.cardno,
-    ssn: req.body.ssn,
-    fname: req.body.fname,
-    lname: req.body.lname,
-    address: req.body.address,
-    city: req.body.city,
-    state: req.body.state,
-    phone: req.body.phone,
+  borrower.findOne({
+    cardno: req.body.cardno
   })
-  .then(function foundOrCreated(borrower) {
-    return res.status(201).json(borrower);
+  .then(function found(model) {
+    if (model) return res.json({
+      message: 'Card number already taken by some one.',
+      data: model
+    })
+    return borrower.create({
+      cardno: req.body.cardno
+    }, {
+      cardno: req.body.cardno,
+      ssn: req.body.ssn,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      address: req.body.address,
+      city: req.body.city,
+      state: req.body.state,
+      phone: req.body.phone,
+    })
+    .then(function created(borrower) {
+      return res.status(201).json({
+        message: 'Created successfully',
+        data: borrower
+      });
+    })
   })
   .catch(next)
 });

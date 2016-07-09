@@ -10,6 +10,8 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.cardNo = '';
     $scope.checkinStatus = '';
     $scope.fineResults = [];
+    $scope.newBorrower = {};
+    $scope.createdBorrower;
 
     // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     //   // On tab active do something here
@@ -121,6 +123,19 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
       return authors.map(function (author) {
         return author.name;
       })
+    };
+
+    $scope.addBorrower = function (form) {
+      if (!form.$valid) return false;
+      $http.post('/borrower/', $scope.newBorrower)
+      .success(function (result) {
+        $scope.newBorrower = {};
+        $scope.borrowerStatus = result.message;
+        $scope.createdBorrower = result.data;
+      })
+      .error(function (error) {
+        console.log('Error: ', error);
+      });
     }
 }]);
 lmsApp.directive('keypress', function () {

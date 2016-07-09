@@ -35,7 +35,7 @@ router.get('/search', function(req, res) {
       JOIN book b ON b.isbn = ba.book \
       JOIN bookcopy bc ON bc.isbn = b.isbn \
       LEFT JOIN bookloan bl ON bl.bookcopy = bc.id \
-      WHERE ($2 = '-1' OR bc.branchid IN ($2)) AND (a.name LIKE  $1 OR b.title LIKE  $1 OR b.isbn LIKE $1) \
+      WHERE ($2 = '-1' OR bc.branchid IN ($2)) AND (a.name ILIKE  $1 OR b.title ILIKE  $1 OR b.isbn ILIKE $1) \
       GROUP BY b.isbn, b.title",
     values: ['%' + query + '%', branch]
   }, function (err, queryResults) {
