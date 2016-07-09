@@ -37,7 +37,9 @@ router.get('/:cardno', function(req, res) {
     if (!queryResults || queryResults.rows.length === 0) return res.json({
       message: 'No fines found'
     })
-    return res.json(queryResults.rows);
+    return res.json({
+      fines: queryResults.rows
+    });
   });
 });
 

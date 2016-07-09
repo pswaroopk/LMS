@@ -4,9 +4,11 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.formData = {};
     $scope.searchResults = [];
     $scope.checkoutData = [];
+    $scope.checkinData = [];
     $scope.checkoutISBN = '';
     $scope.checkoutBranch = '';
     $scope.checkoutCardNo = '';
+    $scope.checkinCardNo = '';
     $scope.cardNo = '';
     $scope.checkinStatus = '';
     $scope.fineResults = [];
@@ -39,7 +41,8 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
       if (!$scope.cardNo) return false;
       $http.get('/fine/' + $scope.cardNo)
           .success(function(data) {
-              $scope.fineResults = data;
+            $scope.fineResults = [];
+            if (!data.message) $scope.fineResults = data.fines;
           })
           .error(function(data) {
               console.log('Error: ' + data);
@@ -51,6 +54,7 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
       if(!confirm('Do you want pay the fine for this book?')) return false;
       $http.put('/fine/' + fineid)
           .success(function(data) {
+            if (data.message) alert(data.message);
             $scope.fineResults = data;
           })
           .error(function(data) {
@@ -79,7 +83,8 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
       // console.log($scope.checkoutISBN, $scope.checkoutBranch, $scope.checkoutCardNo);
       $http.post('/bookloan/checkout', formData)
         .success(function(data) {
-            $scope.checkoutData = data;
+          if (data.message) alert(data.message);
+          $scope.checkoutData = data;
         })
         .error(function(data) {
           if (data) $scope.checkoutStatus = data.message;
@@ -87,13 +92,19 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
         });
     };
 
-    $scope.checkedOutBooks = function() {
-      if (!$scope.checkoutCardNo) return false;
-      $http.get('/bookloan/checkout/' + $scope.checkoutCardNo)
+    $scope.checkedOutBooks = function(type) {
+      var cardno = type === 'in' ? $scope.checkinCardNo : $scope.checkoutCardNo;
+      if (!cardno) return false;
+      $http.get('/bookloan/checkout/' +cardno)
         .success(function(data) {
+          if (data.message) alert(data.message);
           $scope.checkoutData = [];
+          $scope.checkinData = [];
           if (data.message) $scope.checkoutStatus = data.message;
-          else $scope.checkoutData = data;
+          else {
+            if (type === "in") $scope.checkinData = data;
+            else $scope.checkoutData = data;
+          }
         })
         .error(function(data) {
           console.log('Error: ' + data);
@@ -101,17 +112,18 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     };
 
     $scope.checkin = function(loanid, bookid) {
-      if (!$scope.checkoutCardNo) {
+      if (!$scope.checkinCardNo) {
         $scope.checkinStatus = 'Please enter card number'
         return false;
       }
       $http.post('/bookloan/checkin/', {
-        cardno: $scope.checkoutCardNo,
+        cardno: $scope.checkinCardNo,
         loanid: loanid
       })
       .success(function(data) {
+        if (data.message) alert(data.message);
         $scope.checkinStatus = 'Check in successful'
-        $scope.checkoutData = data.books;
+        $scope.checkinData = data.books;
       })
       .error(function(data) {
         $scope.checkinStatus = 'Check in unsuccessful'
