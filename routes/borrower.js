@@ -33,16 +33,15 @@ router.put('/:cardNo', function(req, res, next){
 router.post('/', function(req, res, next){
   var borrower = orm.models.borrower;
   borrower.findOne({
-    cardno: req.body.cardno
+    cardno: req.body.cardno,
+    ssn: req.body.ssn
   })
   .then(function found(model) {
     if (model) return res.json({
-      message: 'Card number already taken by some one.',
+      message: 'User with similar cardno or ssn already exists in the database.',
       data: model
     })
     return borrower.create({
-      cardno: req.body.cardno
-    }, {
       cardno: req.body.cardno,
       ssn: req.body.ssn,
       fname: req.body.fname,

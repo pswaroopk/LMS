@@ -27,7 +27,7 @@
       <div class="tab-content clearfix">
 
         <div class="tab-pane active" id="searchTab">
-          <h3>Please type the name of the book</h3>
+          <h3>Search books, titles and authors.</h3>
           <label for="query" class="field-label">Search*</label>
           <input
             name="query"
@@ -201,6 +201,7 @@
         </div>
         <div class="tab-pane" id="fines">
           <h3>Manage fines</h3>
+          <label for="cardno" class="field-label">Card No*</label>
           <input
             name="cardno"
             type='text'
@@ -211,7 +212,7 @@
             class='clearable form-control'
             keypress='searchFines()'
             placeholder='Card Number'>
-          <button class="btn btn-small" ng-click='searchFines()'>GO</button>
+          <button class="btn btn-success" ng-click='searchFines()'>GO</button>
           <div class='search_results'>
             <div class="table-responsive">
               Results: {{ fineResults.length }}
@@ -250,7 +251,7 @@
           <h3>Enter new borrower details</h3>
           <form name="userForm" ng-submit="addBorrower(userForm)">
             <div class="form-group row">
-            <label for="inputCardNo" class="col-sm-2 form-control-label">Card Nos <span class="required">*</span></label>
+            <label for="inputCardNo" class="col-sm-2 form-control-label">Card No<span class="required">*</span></label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputCardNo" placeholder="Enter your Card Number" required ng-model="newBorrower.cardno">
               </div>
@@ -274,27 +275,27 @@
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputAddress" class="col-sm-2 form-control-label">Address <span class="required">*</span></label>
+            <label for="inputAddress" class="col-sm-2 form-control-label">Address</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control col-md-3" id="inputAddress" placeholder="Address" required ng-model="newBorrower.address">
+                <input type="text" class="form-control col-md-3" id="inputAddress" placeholder="Address" ng-model="newBorrower.address">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputCity" class="col-sm-2 form-control-label">City <span class="required">*</span></label>
+            <label for="inputCity" class="col-sm-2 form-control-label">City</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control" id="inputCity" placeholder="City" required ng-model="newBorrower.city">
+                <input type="text" class="form-control" id="inputCity" placeholder="City" ng-model="newBorrower.city">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputState" class="col-sm-2 form-control-label">State <span class="required">*</span></label>
+            <label for="inputState" class="col-sm-2 form-control-label">State</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control" id="inputState" placeholder="State" required ng-model="newBorrower.state">
+                <input type="text" class="form-control" id="inputState" placeholder="State" ng-model="newBorrower.state">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputPhone" class="col-sm-2 form-control-label">Phone <span class="required">*</span></label>
+            <label for="inputPhone" class="col-sm-2 form-control-label">Phone</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control" id="inputPhone" placeholder="Phone" required ng-model="newBorrower.phone">
+                <input type="text" class="form-control" id="inputPhone" placeholder="Phone" ng-model="newBorrower.phone">
               </div>
             </div>
             <div class="form-group row">

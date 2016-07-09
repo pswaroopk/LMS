@@ -110,8 +110,8 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
         loanid: loanid
       })
       .success(function(data) {
-          $scope.checkinStatus = 'Check in successful'
-          $scope.checkedOutBooks = data;
+        $scope.checkinStatus = 'Check in successful'
+        $scope.checkoutData = data.books;
       })
       .error(function(data) {
         $scope.checkinStatus = 'Check in unsuccessful'

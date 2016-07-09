@@ -113,9 +113,12 @@ router.post('/checkin', function(req, res, next){
       .populate('bookcopy')
       .then(function (lentBooks) {
         if (!lentBooks || lentBooks.length === 0) return res.json({
-          message: 'No books found'
+          message: 'No books found',
+          books: []
         })
-        return res.json(lentBooks);
+        return res.json({
+          books: lentBooks
+        });
       });
     })
 
