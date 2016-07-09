@@ -3,6 +3,7 @@
   color : white;
   background-color: #428bca;
   padding : 5px 15px;
+  min-height: 400px;
 }
 /* remove border radius for the tab */
 
@@ -12,4 +13,12 @@
 
 input {
   color: black;
+}
+
+.form-fields {
+  padding-bottom: 10px;
+}
+
+.field-label {
+  width: 75px;
 }
