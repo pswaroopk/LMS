@@ -19,9 +19,7 @@
         </li>
         <li><a href="#checkIn" data-toggle="tab">Check In</a>
         </li>
-        <li><a href="#5a" data-toggle="tab">Fines</a>
-        </li>
-        <li><a  href="#1a" data-toggle="tab">Library</a>
+        <li><a href="#fines" data-toggle="tab">Fines</a>
         </li>
       </ul>
 
@@ -53,7 +51,7 @@
               <li><a href="#" value="4">Highland Hills</a></li>
               <li><a href="#" value="5">Audelia Road</a></li>
               <li role="separator" class="divider"></li>
-              <li><a href="#" value="-1">Any branch</a></li>
+              <li><a href="#" value="-1">All branches</a></li>
             </ul>
           </div>
           <button class="btn btn-success" type="button" ng-click='search(query)'>GO</button>
@@ -200,8 +198,51 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="5a">
-        <h3>Payback the dues!</h3>
+      <div class="tab-pane" id="fines">
+        <h3>Manage fines</h3>
+        <input
+          name="cardno"
+          type='text'
+          value=''
+          ng-model='cardNo'
+          autofocus
+          style="width:200px;display: inline-block;"
+          class='clearable form-control'
+          keypress='searchFines()'
+          placeholder='Card Number'>
+        <button class="btn btn-small" ng-click='searchFines()'>GO</button>
+        <div class='search_results'>
+          <div class="table-responsive">
+            Results: {{ fineResults.length }}
+            <table class="table table-bordered">
+              <thead>
+                <tr class='row'>
+                  <th class='col-xs-2'>TITLE</th>
+                  <th class='col-xs-2'>Date Out</th>
+                  <th class='col-xs-2'>Due Date</th>
+                  <th class='col-xs-2'>Date In</th>
+                  <th class='col-xs-2'>Fine Amount</th>
+                  <th class='col-xs-1'>PAID</th>
+                  <th class='col-xs-1'></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class='row' ng-repeat="result in fineResults">
+                  <td class='col-xs-2 ng-cloak' >{{ result.title }}</td>
+                  <td class='col-xs-2 ng-cloak' >{{ result.dateout }}</td>
+                  <td class='col-xs-2 ng-cloak' >{{ result.duedate }}</td>
+                  <td class='col-xs-2 ng-cloak' >{{ result.datein }}</td>
+                  <td class='col-xs-2 ng-cloak' >{{ result.fineamount }}</td>
+                  <td class='col-xs-1 ng-cloak' >{{ result.paid }}</td>
+                  <td class='col-xs-1 ng-cloak' >
+                    <button type="button" name="button" ng-show="!result.paid" class="btn btn-success" ng-click="payFine(result.fineid)">
+                      PAY
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
       </div>
       <div class="tab-pane" id="1a"></div>
     </div>

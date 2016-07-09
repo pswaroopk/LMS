@@ -21,7 +21,7 @@ router.put('/:cardNo', function(req, res, next){
     address: req.body.address,
     city: req.body.city,
     state: req.body.state,
-    phone: req.body.phone,
+    phone: req.body.phone
   })
   .then(function updated(borrower) {
     return res.status(201).json(borrower);

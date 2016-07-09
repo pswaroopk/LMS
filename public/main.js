@@ -7,7 +7,9 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.checkoutISBN = '';
     $scope.checkoutBranch = '';
     $scope.checkoutCardNo = '';
+    $scope.cardNo = '';
     $scope.checkinStatus = '';
+    $scope.fineResults = [];
 
     // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     //   // On tab active do something here
@@ -31,6 +33,29 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
           });
     };
 
+    $scope.searchFines = function() {
+      if (!$scope.cardNo) return false;
+      $http.get('/fine/' + $scope.cardNo)
+          .success(function(data) {
+              $scope.fineResults = data;
+          })
+          .error(function(data) {
+              console.log('Error: ' + data);
+          });
+    };
+
+    $scope.payFine = function(fineid) {
+      //add warning message
+      if(!confirm('Do you want pay the fine for this book?')) return false;
+      $http.put('/fine/' + fineid)
+          .success(function(data) {
+            $scope.fineResults = data;
+          })
+          .error(function(data) {
+              console.log('Error: ' + data);
+          });
+    };
+
     $scope.isValid = function () {
       if (!$scope.checkoutISBN || !$scope.checkoutBranch || !$scope.checkoutCardNo) {
         $scope.checkoutStatus = '* Please fill all required fields';
@@ -45,7 +70,7 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
       $scope.checkoutBranch = branch;
       if (!$scope.isValid()) return false;
       var formData = {
-        isbn: $scope.checkoutISBN,
+        isbn: $scope.checkoutISBN,//checkout - isbn GUI
         branch: $scope.checkoutBranch,
         cardno: $scope.checkoutCardNo
       }
@@ -97,45 +122,7 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
         return author.name;
       })
     }
-
-
-
-    //pagination data
-    // $scope.filteredResults = []
-    // ,$scope.currentPage = 0
-    // ,$scope.numPerPage = 12
-    // ,$scope.maxSize = 5;
-
-    // $scope.setPage = function (pageNo) {
-    //     $scope.currentPage = pageNo;
-    // };
-
-    // $scope.$watch('currentPage + numPerPage', function() {
-    //     var begin = (($scope.currentPage - 1) * $scope.numPerPage)
-    //     , end = begin + $scope.numPerPage;
-    //     if($scope.searchResults.length > 0){
-    //         $scope.filteredResults = $scope.searchResults.slice(begin, end);
-    //     }
-    // });
-
-    //selected word
-    $scope.setSelectedWord = function(word){
-        $scope.selected_word = word;
-        $scope.word_selected = 'true';
-    };
-
-    $scope.play = function(songPath){
-        audio.play(songPath);
-    };
-
 }]);
-
-lmsApp.controller('ChildController', ['$scope', function($scope) {
-
-}]);
-
-
-
 lmsApp.directive('keypress', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {

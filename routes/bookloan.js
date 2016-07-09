@@ -27,7 +27,8 @@ router.post('/checkout', function(req, res, next){
   var loanPeriod = 14;
   var bookloan = orm.models.bookloan;
   bookloan.find({
-    cardno: cardno
+    cardno: cardno,
+    datein: null
   })
   .then(function found(bookslent) {
     if (bookslent && bookslent.length >= 3) {
@@ -102,17 +103,22 @@ router.post('/checkin', function(req, res, next){
     datein: new Date()
   })
   .then(function updated(book) {
-    return bookloan.find({
-      cardno: req.body.cardno,
-      datein: null
-    })
-    .populate('bookcopy')
-    .then(function (lentBooks) {
-      if (!lentBooks || lentBooks.length === 0) return res.json({
-        message: 'No books found'
+    return orm.models.fine
+    .updateFine(book[0])
+    .then(function(records) {
+      return bookloan.find({
+        cardno: req.body.cardno,
+        datein: null
       })
-      return res.json(lentBooks);
-    });
+      .populate('bookcopy')
+      .then(function (lentBooks) {
+        if (!lentBooks || lentBooks.length === 0) return res.json({
+          message: 'No books found'
+        })
+        return res.json(lentBooks);
+      });
+    })
+
   })
   .catch(next)
 });
