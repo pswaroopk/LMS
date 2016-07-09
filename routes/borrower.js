@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 var orm = require('../orm');
 
+function pad(num, size) {
+  var s = num+"";
+  while (s.length < size) s = "0" + s;
+  return s;
+}
+
 router.get('/', function(req, res, next) {
   var borrower = orm.models.borrower;
   borrower.find()
@@ -33,30 +39,36 @@ router.put('/:cardNo', function(req, res, next){
 router.post('/', function(req, res, next){
   var borrower = orm.models.borrower;
   borrower.findOne({
-    cardno: req.body.cardno,
     ssn: req.body.ssn
   })
   .then(function found(model) {
     if (model) return res.json({
-      message: 'User with similar cardno or ssn already exists in the database.',
+      message: 'User with similar ssn already exists in the database.',
       data: model
     })
-    return borrower.create({
-      cardno: req.body.cardno,
-      ssn: req.body.ssn,
-      fname: req.body.fname,
-      lname: req.body.lname,
-      address: req.body.address,
-      city: req.body.city,
-      state: req.body.state,
-      phone: req.body.phone,
+
+    var Borrower = orm.models.borrower;
+    Borrower.count().then(function (count) {
+      return borrower.create({
+        cardno: 'ID' + pad(count, 6),
+        ssn: req.body.ssn,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        phone: req.body.phone,
+      })
+      .then(function created(borrower) {
+        return res.status(201).json({
+          message: 'Created successfully',
+          data: borrower
+        });
+      })
+
     })
-    .then(function created(borrower) {
-      return res.status(201).json({
-        message: 'Created successfully',
-        data: borrower
-      });
-    })
+    //cardno: get count of borrower rows and concatenate with
+
   })
   .catch(next)
 });
