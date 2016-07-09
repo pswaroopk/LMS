@@ -6,7 +6,8 @@ router.get('/checkout/:cardno', function(req, res, next) {
   var bookloan = orm.models.bookloan;
   var cardno = req.params.cardno;
   bookloan.find({
-    cardno: cardno
+    cardno: cardno,
+    datein: null
   })
   .populate('bookcopy')
   .then(function (lentBooks) {
@@ -93,10 +94,25 @@ router.post('/checkout', function(req, res, next){
 });
 
 router.post('/checkin', function(req, res, next){
-  var bookcopy = orm.models.bookcopy;
-  bookcopy.find({ bookId: req.body.bookId })
-  .then(function foundOrCreated(bookcopy) {
-    return res.status(201).json(bookcopy);
+  var bookloan = orm.models.bookloan;
+  bookloan.update({
+    id: req.body.loanid,
+    cardno: req.body.cardno
+  }, {
+    datein: new Date()
+  })
+  .then(function updated(book) {
+    return bookloan.find({
+      cardno: req.body.cardno,
+      datein: null
+    })
+    .populate('bookcopy')
+    .then(function (lentBooks) {
+      if (!lentBooks || lentBooks.length === 0) return res.json({
+        message: 'No books found'
+      })
+      return res.json(lentBooks);
+    });
   })
   .catch(next)
 });

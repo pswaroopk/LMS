@@ -150,8 +150,51 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="4a">
-        <h3></h3>
+      <div class="tab-pane" id="checkIn">
+        <h3>Please enter card details to check-in</h3>
+        <br/>
+        <label for="checkoutCardNo">Card No*</label>
+        <input
+          name="checkoutCardNo"
+          type='text'
+          value=''
+          ng-model='checkoutCardNo'
+          id='checkoutCardNo'
+          autofocus
+          style="width:200px;display: inline-block;"
+          class='clearable form-control'
+          placeholder='Card No'
+        />
+        <button class="btn btn-small" ng-click='checkedOutBooks()'>Fetch Books</button>
+        <br/>
+        <p style="padding: 10px;color:red;">{{ checkinStatus }}</p>
+        <div class='search_results'>
+          <div class="table-responsive">
+            Total books lent: {{ checkoutData.length }}
+            <table class="table table-bordered">
+              <thead>
+                <tr class='row'>
+                  <th class='col-xs-3'>ISBN</th>
+                  <th class='col-xs-3'>Date Out</th>
+                  <th class='col-xs-3'>Due Date</th>
+                  <th class='col-xs-3'>Branch</th>
+                  <th class='col-xs-3'></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class='row' ng-repeat="result in checkoutData">
+                  <td class='col-xs-3 ng-cloak' >{{ result.bookcopy.isbn }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.dateout }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.duedate }}</td>
+                  <td class='col-xs-3 ng-cloak' >{{ result.bookcopy.branchid }}</td>
+                  <td class='col-xs-3 ng-cloak' >
+                    <button class="btn btn-small" ng-show="!result.datein" ng-click="checkin(result.id)">Check-In</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <div class="tab-pane" id="5a">
         <h3>Payback the dues!</h3>

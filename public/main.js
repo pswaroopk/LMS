@@ -7,6 +7,7 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.checkoutISBN = '';
     $scope.checkoutBranch = '';
     $scope.checkoutCardNo = '';
+    $scope.checkinStatus = '';
 
     // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     //   // On tab active do something here
@@ -60,27 +61,35 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     };
 
     $scope.checkedOutBooks = function() {
-      var branch = $("#checkOut .btn:first-child").val();
-      $scope.checkoutBranch = branch;
       if (!$scope.checkoutCardNo) return false;
       $http.get('/bookloan/checkout/' + $scope.checkoutCardNo)
         .success(function(data) {
-          $scope.checkoutData = data;
+          $scope.checkoutData = [];
+          if (data.message) $scope.checkoutStatus = data.message;
+          else $scope.checkoutData = data;
         })
         .error(function(data) {
           console.log('Error: ' + data);
         });
     };
 
-    $scope.deleteBookmark = function(id) {
-        //console.log('delete bm',id);
-        $http.delete('/api/bookmarks/' + id)
-            .success(function(data) {
-                $scope.bookmarks = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
+    $scope.checkin = function(loanid, bookid) {
+      if (!$scope.checkoutCardNo) {
+        $scope.checkinStatus = 'Please enter card number'
+        return false;
+      }
+      $http.post('/bookloan/checkin/', {
+        cardno: $scope.checkoutCardNo,
+        loanid: loanid
+      })
+      .success(function(data) {
+          $scope.checkinStatus = 'Check in successful'
+          $scope.checkedOutBooks = data;
+      })
+      .error(function(data) {
+        $scope.checkinStatus = 'Check in unsuccessful'
+        console.log('Error: ' + data);
+      });
     };
 
     $scope.sanitizeAuthors = function (authors) {
