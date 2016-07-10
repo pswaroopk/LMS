@@ -2,19 +2,23 @@ var express = require('express');
 var router = express.Router();
 var orm = require('../orm');
 var _ = require('lodash');
-router.get('/checkout/:cardno', function(req, res, next) {
+router.get('/checkout/', function(req, res, next) {
   var bookloan = orm.models.bookloan;
-  var cardno = req.params.cardno;
+  var cardno = req.query.cardno;
+  var branch = req.query.branch;
   bookloan.find({
     cardno: cardno,
-    datein: null
+    datein: null,
   })
   .populate('bookcopy')
   .then(function (lentBooks) {
-    if (!lentBooks || lentBooks.length === 0) return res.json({
-      message: 'No books found'
+    var branchSpecificBooks = _.filter(lentBooks, function(book) {
+      return book.bookcopy.branchid == branch;
     })
-    return res.json(lentBooks);
+    if (!branchSpecificBooks || branchSpecificBooks.length === 0) return res.json({
+      message: 'No books found in the selected branch'
+    })
+    return res.json(branchSpecificBooks);
   })
   .catch(next);
 });
