@@ -1,9 +1,7 @@
 var lmsApp = angular.module('lmsApp', ['ui.bootstrap']);
 
 lmsApp.controller('mainController',['$scope','$http', function($scope, $http, audio) {
-    $scope.currentBranch = {
-      selected: false
-    };
+    $scope.currentBranch;
     $scope.formData = {};
     $scope.searchResults = [];
     $scope.checkoutData = [];
@@ -31,10 +29,11 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     });
 
     $scope.search = function(query) {
-      // var branch = $("#searchTab .btn:first-child").val();
-      // branch = branch === "" ? '-1' : branch;
-      branch = $scope.currentBranch;
-      $http.get('/book/search?q=' + query + '&branch=' + branch) // .isbn + '&title=' + query.title + '&author=' + query.author
+      if (!$scope.currentBranch) {
+        alert('Please select a branch to continue');
+        return false;
+      }
+      $http.get('/book/search?q=' + query + '&branch=' + $scope.currentBranch) // .isbn + '&title=' + query.title + '&author=' + query.author
           .success(function(data) {
               $scope.searchResults = data;
           })
@@ -45,6 +44,10 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
 
     $scope.searchFines = function() {
       if (!$scope.cardNo) return false;
+      if (!$scope.currentBranch) {
+        alert('Please select a branch to continue');
+        return false;
+      }
       $http.get('/fine?cardno=' + $scope.cardNo + '&branch=' + $scope.currentBranch)
           .success(function(data) {
             $scope.fineResults = [];
@@ -81,6 +84,10 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.checkout = function() {
       // var branch = $("#checkOut .btn:first-child").val();
       // $scope.checkoutBranch = branch;
+      if (!$scope.currentBranch) {
+        alert('Please select a branch to continue');
+        return false;
+      }
       if (!$scope.isValid()) return false;
       var formData = {
         isbn: $scope.checkoutISBN,//checkout - isbn GUI
@@ -99,6 +106,10 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     };
 
     $scope.checkedOutBooks = function(type) {
+      if (!$scope.currentBranch) {
+        alert('Please select a branch to continue');
+        return false;
+      }
       var cardno = type === 'in' ? $scope.checkinCardNo : $scope.checkoutCardNo;
       if (!cardno) return false;
       $http.get('/bookloan/checkout?cardno=' +cardno + '&branch=' + $scope.currentBranch)
@@ -119,13 +130,18 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     };
 
     $scope.checkin = function(loanid, bookid) {
+      if (!$scope.currentBranch) {
+        alert('Please select a branch to continue');
+        return false;
+      }
       if (!$scope.checkinCardNo) {
         $scope.checkinStatus = 'Please enter card number'
         return false;
       }
       $http.post('/bookloan/checkin/', {
         cardno: $scope.checkinCardNo,
-        loanid: loanid
+        loanid: loanid,
+        branch: $scope.currentBranch
       })
       .success(function(data) {
         if (data.message) alert(data.message);

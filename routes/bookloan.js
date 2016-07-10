@@ -83,7 +83,13 @@ router.post('/checkout', function(req, res, next){
             })
             .populate('bookcopy')
             .then(function (models) {
-              return res.status(200).json(models);
+              var branchSpecificBooks = _.filter(models, function(book) {
+                return book.bookcopy.branchid == branch;
+              })
+              if (!branchSpecificBooks || branchSpecificBooks.length === 0) return res.json({
+                message: 'No books found in the selected branch'
+              })
+              return res.status(200).json(branchSpecificBooks);
             });
 
           });
@@ -100,6 +106,7 @@ router.post('/checkout', function(req, res, next){
 
 router.post('/checkin', function(req, res, next){
   var bookloan = orm.models.bookloan;
+  var branch = req.body.branch;
   bookloan.update({
     id: req.body.loanid,
     cardno: req.body.cardno
@@ -116,6 +123,9 @@ router.post('/checkin', function(req, res, next){
       })
       .populate('bookcopy')
       .then(function (lentBooks) {
+        lentBooks = _.filter(lentBooks, function(book) {
+                return book.bookcopy.branchid == branch;
+              })
         if (!lentBooks || lentBooks.length === 0) return res.json({
           message: 'No books found',
           books: []

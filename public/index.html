@@ -11,7 +11,7 @@
 <body ng-controller="mainController">
   <div class="container ng-cloak">
     <div class="header">Library Management System</div>
-    <div class="subheader">
+<!--     <div class="subheader">
       <label class="currentBranch">Please select your current branch to continue</label>
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -25,8 +25,8 @@
           <li><a href="#" value="5">Audelia Road</a></li>
         </ul>
       </div>
-    </div>
-    <div id="exTab1" class="container hide">
+    </div> -->
+    <div id="exTab1" class="container">
       <ul  class="nav nav-pills">
         <li class="active"><a href="#searchTab" data-toggle="tab">Search</a>
         </li>
@@ -39,6 +39,18 @@
         <li><a href="#borrower" data-toggle="tab">Borrower</a>
         </li>
       </ul>
+      <div class="btn-group currentBranch" >
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Select Branch <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#" value="1">Oak Lawn</a></li>
+          <li><a href="#" value="2">Lakewood</a></li>
+          <li><a href="#" value="3">Grauwyler Park</a></li>
+          <li><a href="#" value="4">Highland Hills</a></li>
+          <li><a href="#" value="5">Audelia Road</a></li>
+        </ul>
+      </div>
       <div class="tab-content clearfix">
 
         <div class="tab-pane active" id="searchTab">
@@ -237,56 +249,51 @@
           <h3>Enter new borrower details</h3>
           <form name="userForm" ng-submit="addBorrower(userForm)">
             <div class="form-group row">
-            <label for="inputSSN" class="col-sm-2 form-control-label">SSN <span class="required">*</span></label>
+              <label for="inputSSN" class="col-sm-2 form-control-label">SSN <span class="required">*</span></label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputSSN" placeholder="Enter your SSN Number" required ng-model="newBorrower.ssn">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputFName" class="col-sm-2 form-control-label">FName <span class="required">*</span></label>
+              <label for="inputFName" class="col-sm-2 form-control-label">FName <span class="required">*</span></label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputFName" placeholder="First Name" required ng-model="newBorrower.fname">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputLName" class="col-sm-2 form-control-label">LName <span class="required">*</span></label>
+              <label for="inputLName" class="col-sm-2 form-control-label">LName <span class="required">*</span></label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputLName" placeholder="Last Name" required ng-model="newBorrower.lname">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputAddress" class="col-sm-2 form-control-label">Address</label>
+              <label for="inputAddress" class="col-sm-2 form-control-label">Address</label>
               <div class="col-sm-5">
                 <input type="text" class="form-control col-md-3" id="inputAddress" placeholder="Address" ng-model="newBorrower.address">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputCity" class="col-sm-2 form-control-label">City</label>
+              <label for="inputCity" class="col-sm-2 form-control-label">City</label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputCity" placeholder="City" ng-model="newBorrower.city">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputState" class="col-sm-2 form-control-label">State</label>
+              <label for="inputState" class="col-sm-2 form-control-label">State</label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputState" placeholder="State" ng-model="newBorrower.state">
               </div>
             </div>
             <div class="form-group row">
-            <label for="inputPhone" class="col-sm-2 form-control-label">Phone</label>
+              <label for="inputPhone" class="col-sm-2 form-control-label">Phone</label>
               <div class="col-sm-5">
                 <input type="text" class="form-control" id="inputPhone" placeholder="Phone" ng-model="newBorrower.phone">
               </div>
             </div>
-            <div class="form-group row">
-              <div class="col-sm-offset-2 col-sm-5">
-                <button type="submit" class="btn btn-success" ng-disabled="userForm.$invalid">Save</button>
-              </div>
-            </div>
+            <button type="submit" class="btn btn-success" style="margin-left: 17%;width: 40%" ng-disabled="userForm.$invalid">Save</button>
           </form>
           <div ng-show="createdBorrower">
-            <p>{{ borrowerStatus }}</p>
-            {{ createdBorrower }}
+            <p>{{ borrowerStatus }}</p>{{ createdBorrower }}
           </div>
         </div>
       </div>

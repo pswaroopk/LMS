@@ -23,7 +23,7 @@ body {
   text-align: center;
 }
 #exTab1 {
-  margin-top: 80px;
+  margin-top: 35px;
 }
 #exTab1 .tab-content {
   color : white;
@@ -64,4 +64,10 @@ input {
 }
 
 .currentBranch {
+  top: -36px;
+  float: right;
+}
+
+#borrower form {
+  padding-bottom: 20px;
 }
