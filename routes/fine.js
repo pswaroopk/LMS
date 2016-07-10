@@ -17,8 +17,9 @@ router.get('/', function(req, res, next) {
 
 // usuage
 // localhost:3000/book/search?q=The Res
-router.get('/:cardno', function(req, res) {
-  var cardno = req.params.cardno;
+router.get('/', function(req, res) {
+  var cardno = req.query.cardno;
+  var branch = req.query.branch;
   var Fine = orm.models.fine;
   Fine.query({
     text: "SELECT b.title, bl.duedate, bl.datein, bl.dateout, fineamount, paid, f.id AS fineid\
@@ -26,8 +27,8 @@ router.get('/:cardno', function(req, res) {
       JOIN bookloan bl ON bl.id = f.bookloan \
       JOIN bookcopy bc ON bc.id = bl.bookcopy \
       JOIN book b ON b.isbn = bc.isbn \
-      WHERE bl.cardno = $1",
-    values: [cardno]
+      WHERE bl.cardno = $1 AND bc.branchid = $2",
+    values: [cardno, branch]
   }, function (err, queryResults) {
     if (err)
       return res.status(500).json({

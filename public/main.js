@@ -1,6 +1,9 @@
 var lmsApp = angular.module('lmsApp', ['ui.bootstrap']);
 
 lmsApp.controller('mainController',['$scope','$http', function($scope, $http, audio) {
+    $scope.currentBranch = {
+      selected: false
+    };
     $scope.formData = {};
     $scope.searchResults = [];
     $scope.checkoutData = [];
@@ -23,11 +26,14 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $(".dropdown-menu").on('click', 'li a', function(){
       $(".btn:first-child").text($(this).text());
       $(".btn:first-child").val($(this).attr('value'));
+      $scope.currentBranch = $(this).attr('value');
+      $('#exTab1').removeClass('hide').addClass('show');
     });
 
     $scope.search = function(query) {
-      var branch = $("#searchTab .btn:first-child").val();
-      branch = branch === "" ? '-1' : branch;
+      // var branch = $("#searchTab .btn:first-child").val();
+      // branch = branch === "" ? '-1' : branch;
+      branch = $scope.currentBranch;
       $http.get('/book/search?q=' + query + '&branch=' + branch) // .isbn + '&title=' + query.title + '&author=' + query.author
           .success(function(data) {
               $scope.searchResults = data;
@@ -39,9 +45,10 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
 
     $scope.searchFines = function() {
       if (!$scope.cardNo) return false;
-      $http.get('/fine/' + $scope.cardNo)
+      $http.get('/fine?cardno=' + $scope.cardNo + '&branch=' + $scope.currentBranch)
           .success(function(data) {
             $scope.fineResults = [];
+            if (data.message) alert(data.message);
             if (!data.message) $scope.fineResults = data.fines;
           })
           .error(function(data) {
@@ -63,7 +70,7 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     };
 
     $scope.isValid = function () {
-      if (!$scope.checkoutISBN || !$scope.checkoutBranch || !$scope.checkoutCardNo) {
+      if (!$scope.checkoutISBN || !$scope.checkoutCardNo) {
         $scope.checkoutStatus = '* Please fill all required fields';
         return false;
       }
@@ -72,15 +79,14 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     }
 
     $scope.checkout = function() {
-      var branch = $("#checkOut .btn:first-child").val();
-      $scope.checkoutBranch = branch;
+      // var branch = $("#checkOut .btn:first-child").val();
+      // $scope.checkoutBranch = branch;
       if (!$scope.isValid()) return false;
       var formData = {
         isbn: $scope.checkoutISBN,//checkout - isbn GUI
-        branch: $scope.checkoutBranch,
+        branch: $scope.currentBranch,
         cardno: $scope.checkoutCardNo
       }
-      // console.log($scope.checkoutISBN, $scope.checkoutBranch, $scope.checkoutCardNo);
       $http.post('/bookloan/checkout', formData)
         .success(function(data) {
           if (data.message) alert(data.message);
@@ -95,8 +101,9 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.checkedOutBooks = function(type) {
       var cardno = type === 'in' ? $scope.checkinCardNo : $scope.checkoutCardNo;
       if (!cardno) return false;
-      $http.get('/bookloan/checkout/' +cardno)
+      $http.get('/bookloan/checkout?cardno=' +cardno + '&branch=' + $scope.currentBranch)
         .success(function(data) {
+          $scope.checkoutStatus = ''
           if (data.message) alert(data.message);
           $scope.checkoutData = [];
           $scope.checkinData = [];
