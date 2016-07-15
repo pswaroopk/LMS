@@ -15,6 +15,8 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
     $scope.fineResults = [];
     $scope.newBorrower = {};
     $scope.createdBorrower;
+    $scope.isAdvanced = false;
+    $scope.searchType = 'Advanced';
 
     // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     //   // On tab active do something here
@@ -28,12 +30,24 @@ lmsApp.controller('mainController',['$scope','$http', function($scope, $http, au
       $('#exTab1').removeClass('hide').addClass('show');
     });
 
+    $scope.toggleSearchType = function () {
+      $scope.isAdvanced = !$scope.isAdvanced;
+      if ($scope.isAdvanced) $scope.searchType = 'Simple';
+      else $scope.searchType = 'Advanced';
+    }
+
     $scope.search = function(query) {
       if (!$scope.currentBranch) {
         alert('Please select a branch to continue');
         return false;
       }
-      $http.get('/book/search?q=' + query + '&branch=' + $scope.currentBranch) // .isbn + '&title=' + query.title + '&author=' + query.author
+      var searchQuery;
+      if ($scope.isAdvanced) {
+        searchQuery = 'isbn=' + $scope.isbn_as + '&title=' + $scope.title_as + '&author=' + $scope.author_as + '&type=and';
+      } else {
+        searchQuery = 'q=' + query;
+      }
+      $http.get('/book/search?' + searchQuery + '&branch=' + $scope.currentBranch)
           .success(function(data) {
               $scope.searchResults = data;
           })

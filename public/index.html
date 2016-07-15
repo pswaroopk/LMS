@@ -55,21 +55,65 @@
 
         <div class="tab-pane active" id="searchTab">
           <h3>Search books, titles and authors.</h3>
-          <label for="query" class="field-label">Search*</label>
-          <input
-            name="query"
-            type='text'
-            value=''
-            ng-model='query'
-            id='search_box'
-            autofocus
-            style="width:200px;display: inline-block;"
-            class='clearable form-control'
-            keypress='search(query)'
-            placeholder='Books, Authors, ISBN'
-          />
-          <button class="btn btn-success" type="button" ng-disabled="!query" ng-click='search(query)'>GO</button>
-
+          <div id="simple_search" class="searchType"  ng-show="!isAdvanced">
+            <label for="query" class="field-label">Search*</label>
+            <input
+              name="query"
+              type='text'
+              value=''
+              ng-model='query'
+              id='search_box'
+              autofocus
+              style="width:200px;display: inline-block;"
+              class='clearable form-control'
+              keypress='search(query)'
+              placeholder='Books, Authors, ISBN'
+            />
+            <button class="btn btn-success" type="button" ng-disabled="!query" ng-click='search(query)'>GO</button>
+          </div>
+          <div id="advanced_search" class="searchType" ng-show="isAdvanced">
+            <label for="isbn_search" class="field-label">ISBN</label>
+            <input
+              name="isbn_search"
+              type='text'
+              value=''
+              ng-model='isbn_as'
+              autofocus
+              style="width:200px;display: inline-block;"
+              class='clearable form-control'
+              placeholder='ISBN'
+            />
+            <br>
+            <label for="title_search" class="field-label">Title</label>
+            <input
+              name="title_search"
+              type='text'
+              value=''
+              ng-model='title_as'
+              autofocus
+              style="width:200px;display: inline-block;"
+              class='clearable form-control'
+              placeholder='Book'
+            />
+            <br>
+            <label for="author_search" class="field-label">Author</label>
+            <input
+              name="author_search"
+              type='text'
+              value=''
+              ng-model='author_as'
+              autofocus
+              style="width:200px;display: inline-block;"
+              class='clearable form-control'
+              placeholder='Author'
+            />
+            <button class="btn btn-success"
+              type="button"
+              ng-disabled="(!isbn_as && !title_as && !author_as)"
+              ng-click='search()'>GO
+            </button>
+          </div>
+          <button class="btn btn-success" ng-click="toggleSearchType()">{{ searchType }}</button>
           <div class='search_results'>
             <div class="table-responsive">
               Results: {{ searchResults.length }}

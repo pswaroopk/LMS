@@ -71,3 +71,7 @@ input {
 #borrower form {
   padding-bottom: 20px;
 }
+
+.searchType {
+  display: inline;
+}
