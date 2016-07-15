@@ -68,7 +68,8 @@
             keypress='search(query)'
             placeholder='Books, Authors, ISBN'
           />
-          <button class="btn btn-success" type="button" ng-click='search(query)'>GO</button>
+          <button class="btn btn-success" type="button" ng-disabled="!query" ng-click='search(query)'>GO</button>
+
           <div class='search_results'>
             <div class="table-responsive">
               Results: {{ searchResults.length }}

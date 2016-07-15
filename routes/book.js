@@ -26,6 +26,18 @@ router.get('/search', function(req, res) {
   var skip = req.query.skip || 0;
   var limit = req.query.limit || 20;
 
+
+  var isbn = req.query.isbn || '';
+  var title = req.query.title || '';
+  var author = req.query.author || '';
+  var type = req.query.type || 'or';
+
+
+  if (query) {
+    isbn = title = author = query;
+  }
+
+
   Book.query({
     text: "SELECT b.isbn, b.title, \
       string_agg(DISTINCT a.name, ', ') as author, \
@@ -35,9 +47,9 @@ router.get('/search', function(req, res) {
       JOIN book b ON b.isbn = ba.book \
       JOIN bookcopy bc ON bc.isbn = b.isbn \
       LEFT JOIN bookloan bl ON bl.bookcopy = bc.id \
-      WHERE ($2 = '-1' OR bc.branchid IN ($2)) AND (a.name ILIKE  $1 OR b.title ILIKE  $1 OR b.isbn ILIKE $1) \
+      WHERE ($4 = '-1' OR bc.branchid IN ($4)) AND (a.name ILIKE  $3 " + type + " b.title ILIKE  $2  " + type + "  b.isbn ILIKE $1) \
       GROUP BY b.isbn, b.title",
-    values: ['%' + query + '%', branch]
+    values: ['%' + isbn + '%', '%' + title + '%','%' + author + '%', branch]
   }, function (err, queryResults) {
     if (err)
       return res.status(500).json({
