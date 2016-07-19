@@ -1,0 +1,98 @@
+--1.Create BOOK Table
+CREATE temporary TABLE tempBook
+(isbn10 text,isbn13 text,title text,author text,cover text,publisher text, pages text);
+COPY tempBook(isbn10, isbn13 ,title, author, cover, publisher, pages)
+FROM '/User_path/books.csv'  
+WITH CSV HEADER DELIMITER AS E'\t'; 
+INSERT INTO book(isbn, title)
+SELECT isbn10, title
+FROM tempbook;
+CREATE TABLE tempauthors
+(isbn text, names text);
+INSERT INTO tempauthors(isbn, names)
+SELECT isbn10, author
+FROM tempBook;
+DROP TABLE IF EXISTS tempBook;
+
+--2.Create BORROWER TABLE
+CREATE temporary TABLE tempBorrower
+(tempID text,tempSsn text, tempFname text, tempLname text, tempEmail text,tempaddress text, tempCity text,tempState text,tempPhone text);
+COPY tempBorrower(tempID ,tempSsn , tempFname , tempLname , tempEmail ,tempaddress , tempCity,tempState ,tempPhone )
+FROM '/User_path/borrowers.csv'  
+WITH CSV HEADER DELIMITER AS ',';
+CREATE TABLE if not exists borrower (cardno text, ssn text, fname text, lname text, address text,city text,state text, phone text);
+--DROP TABLE IF EXISTS borrower;
+INSERT INTO borrower(cardNo, ssn, fname, lname, address,city, state, phone)
+SELECT tempID ,tempSsn , tempFname , tempLname ,tempaddress , tempCity ,tempState, tempPhone  
+FROM tempBorrower;
+DROP TABLE IF EXISTS tempBorrower;
+
+--3.Create BOOK_COPY TABLE
+CREATE temporary TABLE tempbookcopy
+(isbn text, branch int, copies int);
+COPY tempbookcopy(isbn, branch, copies )
+FROM '/User_path/book_copies.csv'  
+WITH CSV HEADER DELIMITER AS E'\t';
+INSERT INTO bookcopy(isbn,branchid)
+SELECT isbn, branch
+FROM tempBookcopy t, UNNEST(array_fill(t.copies, ARRAY[t.copies])) s;
+DROP TABLE IF EXISTS tempbookcopy;
+
+--4. CREATE LIBRARY_BRANCH TABLE
+DROP TABLE libraryBranch;
+CREATE TABLE libraryBranch
+(branchid int,name text, address text);
+COPY libraryBranch(branchId, name, address)
+FROM 'E:/Semester_2/DB_DAVI/Project-1/stockFiles/library_branch.csv'  
+WITH CSV HEADER DELIMITER AS E'\t';
+
+--5.CREATE AUTHOR TABLE
+CREATE TABLE if not exists author(id serial primary key, name text) ;
+CREATE TABLE if not exists bookauthor (id serial PRIMARY key, author integer, book text);
+CREATE temporary TABLE tempBook
+(isbn10 text,isbn13 text,title text,author text,cover text,publisher text, pages text);
+COPY tempBook(isbn10, isbn13 ,title, author, cover, publisher, pages)
+FROM '/User_path/books.csv'  
+WITH CSV HEADER DELIMITER AS E'\t';
+CREATE TABLE tempauthors
+(isbn text, author text);
+INSERT INTO tempauthors(isbn, author)
+SELECT isbn10, s.authors
+FROM tempBook t, UNNEST(string_to_array(t.author, ',')) s(authors);
+
+
+INSERT INTO author(name)
+SELECT  DISTINCT author
+FROM   tempauthors;
+create table if not exists author_books__book_authors(id serial primary key, author_books integer , book_authors text);
+
+INSERT INTO author_books__book_authors(author_books, book_authors)
+SELECT a.id, isbn
+FROM author a
+JOIN tempauthors ta ON ta.author = a.name;
+
+INSERT INTO bookauthor(author, book)
+SELECT a.id, isbn
+FROM author a
+JOIN tempauthors ta ON ta.author = a.name;
+
+DROP TABLE IF EXISTS tempBook;
+drop table if exists tempauthors;
+
+--6.CREATE FINE TABLE
+DROP TABLE IF EXISTS public.fine;
+CREATE TABLE public.fine
+(
+  paid boolean, bookloan integer, id 
+  serial primary key, fineamount numeric(10,2)
+)
+
+--QUERY To display the fines table
+SELECT b.title, fineamount, paid, bl.duedate, bl.datein, bl.dateout, f.id AS fineid 
+FROM fine f 
+JOIN bookloan bl ON bl.id = f.bookloan
+JOIN bookcopy bc ON bc.id = bl.bookcopy
+JOIN book b ON b.isbn = bc.isbn
+WHERE bl.cardno = 'ID000003'
+
+
